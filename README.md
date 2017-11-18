@@ -4,4 +4,5 @@ Example of Deconvnet in PyTorch for VGG16.  vis_utils.py adapted from the assign
 
 Work in progress.  Test codes to come.
 
+## This is a fork of https://github.com/csgwon/pytorch-deconvnet
 
