@@ -3,7 +3,7 @@ import torchvision.models as models
 
 import numpy as np
 
-vgg16_pretrained = models.vgg16(pretrained=True)
+vgg16_pretrained = models.vgg16(pretrained=True).eval()
 
 class VGG16_conv(torch.nn.Module):
     def __init__(self, n_classes):
@@ -64,9 +64,19 @@ class VGG16_conv(torch.nn.Module):
     def _initialize_weights(self):
         # initializing weights using ImageNet-trained model from PyTorch
         for i, layer in enumerate(vgg16_pretrained.features):
-            if isinstance(layer, torch.nn.Conv2d):
+            print("initializing layer {}: {}".format(i, layer))
+            try:
                 self.features[i].weight.data = layer.weight.data
                 self.features[i].bias.data = layer.bias.data
+            except:
+                continue
+        for i, layer in enumerate(vgg16_pretrained.classifier):
+            print("initializing layer {}: {}".format(i, layer))
+            try:
+                self.classifier[i].weight.data = layer.weight.data
+                self.classifier[i].bias.data = layer.bias.data
+            except:
+                continue
 
     def get_conv_layer_indices(self):
         return [0, 2, 5, 7, 10, 12, 14, 17, 19, 21, 24, 26, 28]
